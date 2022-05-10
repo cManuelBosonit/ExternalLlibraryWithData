@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ChartConfiguration, ChartType } from 'chart.js';
+import { BaseChartDirective } from 'ng2-charts';
 import { Planet } from 'src/app/interfaces/planet';
 import { DataService } from 'src/app/service/data.service';
 
@@ -26,8 +27,11 @@ export class LineComponent implements OnInit {
           this.planetDiameter.push(planet.diameter)
         })   
         this.lineChartData.labels!.slice(0,9).push(this.planetNames);
+        this.chart.render()
       }) 
   }
+
+  @ViewChild(BaseChartDirective) chart!: BaseChartDirective;
 
   public lineChartData: ChartConfiguration['data'] = {
     

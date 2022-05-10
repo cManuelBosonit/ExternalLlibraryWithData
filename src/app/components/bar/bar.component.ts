@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import { DataService } from 'src/app/service/data.service';
@@ -11,7 +11,8 @@ import { Planet } from '../../interfaces/planet';
 })
 export class BarComponent implements OnInit {
 
-  constructor( private dataService: DataService ) { }
+  constructor( private dataService: DataService,
+     ) { }
 
   planets: Planet[] = [];
   planetNames: string[] = [];
@@ -20,16 +21,18 @@ export class BarComponent implements OnInit {
   ngOnInit(): void {
     this.dataService.getAllPlanets()
       .subscribe(data => {
+        console.log(data);
         this.planets = data.results;
         this.planets.forEach((planet) => {
           this.planetNames.push(planet.name)
           this.planetDiameter.push(planet.diameter)
         })       
         this.barChartData.labels!.slice(0,9).push(this.planetNames);
+        this.chart.render()
       })
   }
  
-  @ViewChild(BaseChartDirective) chart: BaseChartDirective | undefined;
+  @ViewChild(BaseChartDirective) chart!: BaseChartDirective;
 
   public barChartOptions: ChartConfiguration['options'] = {
     responsive: true,
@@ -43,11 +46,11 @@ export class BarComponent implements OnInit {
   };
   public barChartType: ChartType = 'bar';
 
-  public barChartData: ChartData<'bar'> = {
-    labels: this.planetNames,
+  public barChartData: ChartData<'bar'> = {    
     datasets: [
       { data: this.planetDiameter, label: 'Diameters'}
-    ]
+    ],
+    labels: this.planetNames
   }
 
 }

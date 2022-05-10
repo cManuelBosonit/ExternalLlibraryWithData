@@ -1,6 +1,5 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { ChartConfiguration, ChartEvent, ChartType } from 'chart.js';
-import { BaseChartDirective } from 'ng2-charts';
+import { Component, OnInit } from '@angular/core';
+import { ChartConfiguration, ChartType } from 'chart.js';
 import { Planet } from 'src/app/interfaces/planet';
 import { DataService } from 'src/app/service/data.service';
 
@@ -18,17 +17,14 @@ export class LineComponent implements OnInit {
   planetDiameter: number[] = [];
 
   ngOnInit(): void {
-    this.onRefresh()
-  }
-
-  onRefresh() {
-    this.dataService.getAllPlanets()
+    this.dataService
+    .getAllPlanets()
       .subscribe(data => {
-        this.planets = data.results
-        for(let planet of this.planets){
+        this.planets = data.results;
+        this.planets.forEach((planet) => {
           this.planetNames.push(planet.name)
           this.planetDiameter.push(planet.diameter)
-        }      
+        })   
         this.lineChartData.labels!.slice(0,9).push(this.planetNames);
       }) 
   }

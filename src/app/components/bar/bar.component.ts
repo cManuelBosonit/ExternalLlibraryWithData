@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ChartConfiguration, ChartData, ChartEvent, ChartType } from 'chart.js';
+import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import { DataService } from 'src/app/service/data.service';
 import { Planet } from '../../interfaces/planet';
@@ -18,19 +18,15 @@ export class BarComponent implements OnInit {
   planetDiameter: number[] = [];
 
   ngOnInit(): void {
-    this.onRefresh()
-  }
-
-  onRefresh() {
     this.dataService.getAllPlanets()
       .subscribe(data => {
-        this.planets = data.results
-        for(let planet of this.planets){
+        this.planets = data.results;
+        this.planets.forEach((planet) => {
           this.planetNames.push(planet.name)
           this.planetDiameter.push(planet.diameter)
-        }      
+        })       
         this.barChartData.labels!.slice(0,9).push(this.planetNames);
-      }) 
+      })
   }
  
   @ViewChild(BaseChartDirective) chart: BaseChartDirective | undefined;
